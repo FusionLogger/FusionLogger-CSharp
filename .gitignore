@@ -1,0 +1,81 @@
+# Build artifacts
+bin/
+obj/
+
+# User-specific files
+*.user
+*.vspscc
+*.vssscc
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.docstates
+
+# Visual Studio Code settings
+.vscode/
+
+# ASP.NET temp files
+**/.vs
+
+# Package files
+*.nupkg
+packages/
+
+# Azure stuff
+*.azure*
+
+# Logs
+*.log
+
+# Environment and configuration
+.env
+appsettings.*.json
+
+# JetBrains Rider
+.idea/
+*.iml
+
+# Other generated files
+_Dependencies
+ServiceFabricBackup/
+Thumbs.db
+
+# Resharper files
+*.DotSettings.user
+
+# macOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+Desktop.ini
+
+# Docker
+.dockerignore
+
+# Optional: Uncomment if you use any of these tools
+# node_modules/
+# yarn.lock
+
+# Local test databases
+*.mdf
+*.ldf
+
+# Rider logs and workspaces
+.idea/
+workspace.xml
+*.ipr
+
+# Coverage and test results
+TestResults/
+coverage/
+
+# Compiled files
+*.dll
+*.exe
+*.pdb
+*.dbmdl
+*.bak
+*.swp
+
+# Custom ignores here!
