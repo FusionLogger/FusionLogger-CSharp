@@ -1,4 +1,8 @@
-﻿namespace FusionLogger
+﻿using System.Collections.Concurrent;
+using System.Net;
+using System.Runtime.CompilerServices;
+
+namespace FusionLogger
 {
 	// TODO: DOKUMENTATION
 	public class FusionLogger : IFusionLogger
@@ -20,12 +24,29 @@
 		public IFusionLogFormatter Formatter { get; private set; } = new FusionLogFormatter();
 
 
+		// TODO: DOKUMENTATION
+		private readonly string HostName = Dns.GetHostName();
+
+
+		// TODO: DOKUMENTATION
+		private readonly int ProcessID = Environment.ProcessId;
+
+
+		// TODO: DOKUMENTATION
+		private readonly string MachineName = Environment.MachineName;
+
+
+		// TODO: DOKUMENTATION
+		private readonly ConcurrentQueue<FusionLogRecord> Queue = FusionLogProcessor.RegisterProcessor().Queue;
+
 
 		#region Initialsation
 
 
 		// TODO: DOKUMENTATION
-		private FusionLogger() { }
+		private FusionLogger()
+		{
+		}
 
 
 		// TODO: DOKUMENTATION
@@ -68,35 +89,47 @@
 		#region Fundamental Public Methods
 
 
-		// TODO: DOKUMENTATION
-		public void Debug(string message)
-			=> throw new NotImplementedException();
+		/// <inheritdoc/>
+		public void Debug(string message, [CallerFilePath] string callerFile = "",
+			[CallerMemberName] string callerMember = "", [CallerLineNumber] int callerLine = -1)
+		{
+			this.PushToQueue(FusionLogLevel.Debug, message, null, callerFile, callerMember, callerLine);
+		}
 
 
-		// TODO: DOKUMENTATION
-		public void Info(string message)
-			=> throw new NotImplementedException();
+		/// <inheritdoc/>
+		public void Info(string message, [CallerFilePath] string callerFile = "",
+			[CallerMemberName] string callerMember = "", [CallerLineNumber] int callerLine = -1)
+		{
+			this.PushToQueue(FusionLogLevel.Info, message, null, callerFile, callerMember, callerLine);
+		}
 
 
-		// TODO: DOKUMENTATION
-		public void Warning(string message, Exception? exception)
-			=> throw new NotImplementedException();
+		/// <inheritdoc/>
+		public void Warning(string message, Exception? exception, [CallerFilePath] string callerFile = "",
+			[CallerMemberName] string callerMember = "", [CallerLineNumber] int callerLine = -1)
+		{
+			this.PushToQueue(FusionLogLevel.Warning, message, null, callerFile, callerMember, callerLine);
+		}
 
 
-		// TODO: DOKUMENTATION
-		public void Critical(string message, Exception? exception)
-			=> throw new NotImplementedException();
+		/// <inheritdoc/>
+		public void Critical(string message, Exception? exception, [CallerFilePath] string callerFile = "",
+			[CallerMemberName] string callerMember = "", [CallerLineNumber] int callerLine = -1)
+		{
+			this.PushToQueue(FusionLogLevel.Critical, message, null, callerFile, callerMember, callerLine);
+		}
 
 
-		// TODO: DOKUMENTATION
+		/// <inheritdoc/>
 		public void BeginScope(string scope) => this.Scope = scope;
 
 
-		// TODO: DOKUMENTATION
+		/// <inheritdoc/>
 		public void EndScope() => this.Scope = string.Empty;
 
 
-		// TODO: DOKUMENTATION
+		/// <inheritdoc/>
 		public void SetMinLevel(FusionLogLevel fusionLogLevel) => this.MinLevel = fusionLogLevel;
 
 
@@ -109,12 +142,34 @@
 
 		// TODO: DOKUMENTATION
 		private bool IsEnabled(FusionLogLevel requested)
-		=> throw new NotImplementedException();
+		{
+			int eValueMinLevel = (int)this.MinLevel;
+			int eValueRequested = (int)requested;
+			return eValueMinLevel <= eValueRequested;
+		}
 
 
 		// TODO: DOKUMENTATION
-		private void Log(string message, Exception? exception)
-		=> throw new NotImplementedException();
+		private void PushToQueue(FusionLogLevel level, string message, Exception? exception, string file, string method, int line)
+		{
+			if (this.IsEnabled(level))
+			{
+				FusionLogRecord item = new FusionLogRecord(
+					Logger: this,
+					Timestamp: DateTime.Now,
+					Level: level,
+					Message: message,
+					ThreadId: Environment.CurrentManagedThreadId,
+					ProcessId: this.ProcessID,
+					ClassName: file,
+					MethodName: method,
+					MethodLine: line,
+					HostName: this.HostName,
+					Exception: exception
+				);
+				this.Queue.Enqueue(item);
+			}
+		}
 
 
 		#endregion Internal Private Methods
