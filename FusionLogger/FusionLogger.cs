@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Net;
+﻿using System.Net;
 using System.Runtime.CompilerServices;
 
 namespace FusionLogger
@@ -37,7 +36,7 @@ namespace FusionLogger
 
 
 		// TODO: DOKUMENTATION
-		private readonly ConcurrentQueue<FusionLogRecord> Queue = FusionLogProcessor.RegisterProcessor().Queue;
+		private readonly FusionLogProcessor Processor = FusionLogProcessor.GetInstance();
 
 
 		#region Initialsation
@@ -167,7 +166,7 @@ namespace FusionLogger
 					HostName: this.HostName,
 					Exception: exception
 				);
-				this.Queue.Enqueue(item);
+				this.Processor.EnqueueLogRecord(item);
 			}
 		}
 

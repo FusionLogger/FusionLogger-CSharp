@@ -2,6 +2,6 @@
 {
 	public interface IFusionLogFormatter
 	{
-
+		string Format(FusionLogRecord record);
 	}
 }
