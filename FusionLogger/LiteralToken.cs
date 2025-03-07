@@ -7,7 +7,8 @@ namespace FusionLogger
 	{
 		private readonly string literal;
 		public LiteralToken(string literal) { this.literal = literal; }
-		public override void Append(FusionLogRecord record, StringBuilder sb)
+
+		public void Append(FusionLogRecord record, StringBuilder sb)
 		{
 			sb.Append(this.literal);
 		}

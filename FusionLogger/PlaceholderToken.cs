@@ -14,7 +14,7 @@ namespace FusionLogger
 			this.Format = format;
 		}
 
-		public override void Append(FusionLogRecord record, StringBuilder sb)
+		public void Append(FusionLogRecord record, StringBuilder sb)
 		{
 			// Je nach Key holen wir den entsprechenden Wert:
 			switch (this.Key)
@@ -26,7 +26,7 @@ namespace FusionLogger
 					sb.Append(record.Level);
 					break;
 				case "LoggerName":
-					sb.Append(record.Name);
+					sb.Append(record.Logger.Name);
 					break;
 				case "Message":
 					sb.Append(record.Message);

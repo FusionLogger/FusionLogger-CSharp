@@ -20,7 +20,7 @@ namespace FusionLogger
 
 
 		// TODO: DOKUMENTATION
-		public IFusionLogFormatter Formatter { get; private set; } = new FusionLogFormatter();
+		public IFusionLogFormatter Formatter { get; private set; } = new FusionLogFormatter("");
 
 
 		// TODO: DOKUMENTATION
